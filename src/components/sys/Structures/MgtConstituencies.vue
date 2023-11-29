@@ -1,0 +1,387 @@
+<template>
+  <div>
+    <div class="card-body mb-3 pb-3 pe-2 bg-light  table-responsive container-fluid">
+      <button
+        type="button"
+        data-bs-toggle="modal"
+        data-bs-target="#ViewData"
+        class="btn btn-sm float-end mt-3 btn-danger ms-2"
+      >
+        <i class="fas fa-eye"></i> View Constituencies
+      </button>
+    </div>
+    <div class="card-body px-5 py-5 bg-light shadow-lg table-responsive">
+      <form method="POST" id="AddConstituencies">
+        <div class="mb-3 col-md-12 my-2 py-2">
+          <label id="label" for="" class="required form-label my-2 py-2"
+            >Select Parent District</label
+          >
+          <select
+            required
+            id="district-select"
+            class="form-select form-control form-select-light"
+            data-control="select2"
+            data-placeholder="Select an option"
+            name="DistrictID"
+          >
+            <option value=""></option>
+          </select>
+        </div>
+        <div id="MgtConstituencies"></div>
+        <input type="text" name="PostRoute" value="MassInsert" class="d-none" />
+        <input
+          type="text"
+          name="TableName"
+          value="constituencies"
+          class="d-none"
+        />
+        <input type="text" name="created_at" value="" class="d-none" />
+        <input type="text" name="ConstituencyID" class="randomid d-none" />
+      </form>
+    </div>
+    <!-- mODAL VEW DATA  -->
+
+    <div
+      class="modal fade"
+      id="ViewData"
+      aria-labelledby="ViewDataLabel"
+      aria-hidden="true"
+    >
+      <div class="modal-dialog modal-fullscreen">
+        <div class="modal-content">
+          <div class="modal-header shadow-lg">
+            <div class="col-12">
+              <input
+                type="text"
+                class="form-control float-end mt-4"
+                v-model="searchTerm"
+                placeholder="Search Constituencies"
+              />
+            </div>
+          </div>
+          <div class="modal-body">
+            <div>
+              <div>
+                <div>
+                  <div class="list-group shadow-lg" id="accordionExample">
+                    <div
+                      class="list-group-item"
+                      v-for="(record, index) in filteredRecords"
+                      :key="index"
+                    >
+                      <div
+                        class="d-flex justify-content-between align-items-center"
+                        data-bs-toggle="collapse"
+                        :data-bs-target="'#collapse' + index"
+                        :aria-expanded="index == 0"
+                        :aria-controls="'collapse' + index"
+                      >
+                        <h5 class="mb-1 text-danger fw-bolder">
+                          <i
+                            class="me-2 fas fa-circle-notch text-danger me-2"
+                          ></i>
+                          {{ record[titleColumnName] }}
+                        </h5>
+                        <button
+                          class="btn btn-link text-secondary"
+                          type="button"
+                        >
+                          <i class="fas fa-chevron-down"></i>
+                        </button>
+                      </div>
+                      <div
+                        :id="'collapse' + index"
+                        class="collapse"
+                        :class="{ show: index == 0 }"
+                        data-bs-parent="#accordionExample"
+                      >
+                        <div class="card mt-2">
+                          <ul class="list-group list-group-flush">
+                            <li
+                              class="list-group-item"
+                              v-for="(value, key) in record"
+                              :key="key"
+                              v-if="!ignoredColumns.includes(key)"
+                              :class="`x_${key}`"
+                            >
+                              <div
+                                class="d-flex justify-content-between py-3"
+                                :class="`x_${key}`"
+                              >
+                                <strong>{{ formatColumnName(key) }}</strong>
+                                <span class="fw-bold text-primary">{{
+                                  value
+                                }}</span>
+                              </div>
+                            </li>
+                          </ul>
+                          <div class="card-body text-center">
+                            <button
+                              type="button"
+                              class="btn btn-dark btn-sm me-2"
+                              data-bs-toggle="modal"
+                              data-bs-target="#UpdateProvincesModal"
+                              :data-id="record.id"
+                              :data-tablename="tableName"
+                              @click="updateRecord(record.id, tableName)"
+                            >
+                              <i class="fas fa-edit"></i> Update
+                            </button>
+                            <button
+                              type="button"
+                              class="btn btn-danger DeleteMe btn-sm"
+                              :data-id="record.id"
+                              :data-tablename="tableName"
+                            >
+                              <i class="fas fa-trash"></i> Delete
+                            </button>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="modal-footer">
+            <button
+              type="button"
+              class="btn btn-danger"
+              data-bs-dismiss="modal"
+            >
+              Close
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- mODAL VEW DATA  -->
+
+    <!-- Modal -->
+    <div
+      class="modal fade"
+      id="UpdateProvincesModal"
+      tabindex="-1"
+      role="dialog"
+      aria-labelledby="modalTitleId"
+      aria-hidden="true"
+    >
+      <div class="modal-dialog" role="document">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="modalTitleId">
+              Update the selected record
+            </h5>
+            <button
+              type="button"
+              class="btn-close"
+              data-bs-dismiss="modal"
+              aria-label="Close"
+            ></button>
+          </div>
+          <form action="#" id="UpdateFormData">
+            <div class="modal-body">
+              <div class="container-fluid">
+                <div id="UpdateProvinceForm">
+                  <input
+                    type="text"
+                    name="PostRoute"
+                    value="MassUpdate"
+                    class="d-none"
+                  />
+                  <input
+                    type="text"
+                    name="TableName"
+                    value="constituencies"
+                    class="d-none"
+                  />
+                  <input
+                    type="text"
+                    class="UpdateRecordID d-none"
+                    name="id"
+                    value=""
+                  />
+
+                  <div class="mb-3 col-md-12 my-2 py-2">
+                    <label
+                      id="label"
+                      for=""
+                      class="required form-label my-2 py-2"
+                      >Select Parent Province</label
+                    >
+                    <select
+                      required
+                      id="district-select-update"
+                      class="form-select form-control form-select-light"
+                      data-control="select2"
+                      data-placeholder="Select an option"
+                      name="ProvinceID"
+                    >
+                      <option value=""></option>
+                    </select>
+                  </div>
+
+                  <div id="UpdateModalContent"></div>
+                </div>
+              </div>
+            </div>
+            <div class="modal-footer">
+              <button
+                type="button"
+                class="btn btn-secondary"
+                data-bs-dismiss="modal"
+              >
+                Close
+              </button>
+              <button
+                type="submit"
+                data-bs-dismiss="modal"
+                class="btn btn-primary"
+              >
+                Save Changes
+              </button>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+</template>
+
+<script>
+import axios from "axios";
+
+export default {
+  data() {
+    return {
+      provinces: [],
+      provinceId: null,
+      searchTerm: "",
+      tableName: "constituencies",
+      excludedColumns: [
+        "created_at",
+        "updated_at",
+        "ProvinceID",
+        "DistrictID",
+        "ConstituencyID",
+      ],
+      records: [],
+      titleColumnName: "ConstituencyName",
+      ignoredColumns: ["created_at", "updated_at", "ProvinceID", "DistrictID"],
+      SERVER_URL: window.SERVER_URL,
+    };
+  },
+  mounted() {
+    window.RemoveDisplayElements(this.ignoredColumns);
+    window.fixSelectInModals();
+    window.SetMyPageTitle("Create and Manage constituencies");
+
+    window.ButtonActions(".DeleteMe", "Delete", () =>
+      this.fetchAndDisplayData()
+    );
+    window.FormEngine(
+      this.tableName,
+      this.excludedColumns,
+      "#MgtConstituencies",
+      12,
+      12
+    );
+    setRandomId();
+    setCreatedAtValue();
+    SendFormEngine("AddConstituencies", () => this.fetchAndDisplayData());
+    SendFormEngine("UpdateFormData", () => this.fetchAndDisplayData());
+    window.removeElementsWithXIdClass();
+
+    window.FetchSelect(
+      "district-select",
+      "FetchDistricts",
+      "DistrictName",
+      "DistrictID"
+    );
+
+    window.FetchSelect(
+      "district-select-update",
+      "FetchDistricts",
+      "DistrictName",
+      "DistrictID"
+    );
+  },
+  async created() {
+    await this.fetchAndDisplayData();
+  },
+  methods: {
+    async FetchProvinces() {
+      console.log(window.SERVER_URL + "FetchProvinces");
+
+      try {
+        const response = await axios.post(
+          `${window.SERVER_URL}FetchProvinces`,
+          {
+            excludedColumns: this.ignoredColumns,
+          }
+        ); // Replace 'column1', 'column2' with the actual column names you wish to exclude
+        if (response.data && response.data.records) {
+          console.log(response.data.records);
+          this.provinces = response.data.records;
+        }
+      } catch (error) {
+        console.error("Failed to fetch provinces:", error);
+      }
+    }, // Update the form
+    updateRecord(id, tableName) {
+      // Call your update function with the id and tableName
+      // I am not sure about the other parameters, but you can replace them with the correct values
+      window.UpdateEngine(
+        tableName,
+        this.excludedColumns,
+        "#UpdateModalContent",
+        12,
+        12,
+        id
+      );
+
+      this.fetchAndDisplayData();
+
+      window.setElementValueWhenAvailable(".UpdateRecordID", id);
+    },
+
+    // Update the form
+
+    formatColumnName(name) {
+      return name
+        .replace(/([A-Z])/g, " $1")
+        .replace(/_/g, " ")
+        .trim();
+    },
+    async fetchAndDisplayData() {
+      try {
+        const {
+          data: { records },
+        } = await axios.post(`${this.SERVER_URL}FetchConstituencies`);
+
+        if (!Array.isArray(records) || records.length === 0)
+          throw "Invalid or empty records";
+
+        this.records = records;
+      } catch (error) {
+        console.error("Error fetching records:", error);
+      }
+    },
+  },
+  computed: {
+    filteredRecords() {
+      if (!this.searchTerm) {
+        return this.records;
+      }
+
+      const normalizedSearchTerm = this.searchTerm.toLowerCase();
+      return this.records.filter((record) => {
+        const title = record[this.titleColumnName]?.toLowerCase();
+        return title.includes(normalizedSearchTerm);
+      });
+    },
+  },
+};
+</script>

@@ -1,0 +1,92 @@
+<!-- <template>
+    <div class="card futuristic-card" v-for="(record, index) in records" :key="record.id">
+        <div class="card shadow-sm">
+            <div class="card-header">
+                <h3 class="card-title">{{ record.EbsSignal }}</h3>
+                <div class="card-toolbar">
+                    <button class="btn btn-sm btn-light dropdown-toggle" type="button" id="dropdownMenuButton"
+                        data-bs-toggle="dropdown" aria-expanded="false">
+                        Action
+                    </button>
+                    <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                        <li><a class="dropdown-item" href="#" data-bs-toggle="modal" data-bs-target="#UpdateProvincesModal"
+                                :data-id="record.id" :data-tablename="tableName"
+                                @click="updateRecord(record.id, tableName)">Update</a>
+                        </li>
+                        <li><a class="dropdown-item DeleteMe" href="#" :data-id="record.id"
+                                :data-tablename="tableName">Delete</a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+            <div class="card-body p-0">
+                <div class="card-p mb-10">{{ record.description }}</div>
+                <div class="text-center px-4">
+                    <img class="mw-100 mh-300px card-rounded-bottom" :src="record.imageURL" alt="Record Image" />
+                </div>
+            </div>
+        </div>
+    </div>
+</template>
+
+<script>
+import axios from 'axios';
+
+export default {
+    data() {
+        return {
+            records: [],
+            tableName: "ebs_signals",
+        };
+    },
+    created() {
+        this.fetchRecords();
+
+
+    },
+    mounted() {
+        window.SetMyPageTitle("View CEBS Signals");
+        window.ButtonActions(".DeleteMe", "Delete", () =>
+            this.fetchAndDisplayData()
+        );
+
+    },
+    methods: {
+        async fetchRecords() {
+            try {
+                const response = await axios.get(SERVER_URL + 'FetchEbsSignals');
+                this.records = response.data.records;
+            } catch (error) {
+                console.error(error);
+            },
+            updateRecord(id, tableName) {
+                // Call your update function with the id and tableName
+                // I am not sure about the other parameters, but you can replace them with the correct values
+                window.UpdateEngine(
+                    tableName,
+                    this.excludedColumns,
+                    "#UpdateModalContent",
+                    12,
+                    12,
+                    id
+                );
+
+                this.fetchAndDisplayData();
+
+                window.setElementValueWhenAvailable(".UpdateRecordID", id);
+            },
+        },
+
+    },
+};
+</script>
+
+<style scoped>
+.mh-300px {
+    max-height: 300px;
+}
+
+.card-rounded-bottom {
+    border-radius: 0 0 calc(2.25rem - 1px) calc(2.25rem - 1px);
+}
+</style> -->

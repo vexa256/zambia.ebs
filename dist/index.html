@@ -1,0 +1,223 @@
+<head>
+  <base href />
+  <title>
+    Zambia EBS </title>
+
+  <meta charset="utf-8" />
+  <meta content="width=device-width, initial-scale=1" name="viewport" />
+  <link href rel="canonical" />
+  <link href="assets/media/logos/favicon.ico" rel="shortcut icon" />
+
+  <!--end::Vendor Stylesheets-->
+  <!--begin::Global Stylesheets Bundle(mandatory for all pages)-->
+  <link href="assets/plugins/global/plugins.bundle.css" rel="stylesheet" type="text/css" />
+  <link href="assets/css/style.bundle.css" rel="stylesheet" type="text/css" />
+ 
+  <style>
+
+  body {
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen-Sans, Ubuntu, Cantarell, 'Helvetica Neue', sans-serif;
+  background-color: #f2f2f7;
+  color: #000;
+}
+
+/* Headings */
+h1, h2, h3, h4, h5, h6 {
+  color: #000;
+}
+
+/* Inputs and Textareas */
+.form-control {
+  border: none;
+  border-radius: 12px;
+  padding: 10px;
+  background-color: #fff;
+  box-shadow: inset 0 0.5px 1px rgba(0, 0, 0, 0.1), inset 0 1px 2px rgba(0, 0, 0, 0.1);
+  font-size: 12px;
+}
+
+
+
+/* Select Elements */
+.form-select {
+  appearance: none;
+  border: none;
+  border-radius: 12px;
+  padding: 10px;
+  background-color: #fff;
+  box-shadow: inset 0 0.5px 1px rgba(0, 0, 0, 0.1), inset 0 1px 2px rgba(0, 0, 0, 0.1);
+  font-size: 13px;
+}
+
+/* Lists */
+.list-group {
+  border-radius: 12px;
+  overflow: hidden;
+}
+
+.list-group-item {
+  border: none;
+  color: #000;
+  background-color: #fff;
+  padding: 12px;
+  border-bottom: 1px solid #c7c6cb;
+}
+
+/* Cards */
+.card {
+  border: none;
+  border-radius: 12px;
+  box-shadow: 0 0.5px 1px rgba(0, 0, 0, 0.1), 0 1px 2px rgba(0, 0, 0, 0.1);
+  overflow: hidden;
+  background-color: #fff;
+}
+
+/* Buttons */
+.btn {
+  border: none;
+  border-radius: 12px;
+  padding: 10px 20px;
+  background-color: auto;
+  box-shadow: 0 0.5px 1px rgba(0, 0, 0, 0.1), 0 1px 2px rgba(0, 0, 0, 0.1);
+  font-size: 12px;
+  color: #fff;
+  text-align: center;
+  transition: background-color 0.1s ease-in-out;
+}
+
+.btn-dark {
+  background-color: #000;
+}
+
+.btn-danger {
+  background-color: #ff3b30;
+}
+
+.btn:active {
+  opacity: 0.7;
+}
+
+.btn:focus {
+  outline: none;
+  box-shadow: none;
+}
+
+
+  .btn {
+    padding: 6px ;
+  }
+  
+.modal {
+
+    z-index: 7000;
+  }
+.swal2-container{
+
+
+  z-index: 10000 !important;
+}
+  
+
+@media (min-width: 992px) {
+    body {
+        padding-top: 75px; /* Adjust according to your header's height on desktop */
+    }
+}
+
+#kt_app_header {
+    z-index: 1020;
+}
+.modal-backdrop{
+
+display: none;
+
+}
+
+
+.app-container {
+max-width: 100% !important;
+padding-left: 10px !important;
+padding-right: 10px !important;
+}
+</style>
+
+
+    <script type="module" crossorigin src="assets/index-673a8457.js"></script>
+    <link rel="stylesheet" href="assets/index-c93f328d.css">
+  </head>
+
+  <!--begin::Body-->
+
+<body class="app-default" data-kt-app-header-fixed="true" data-kt-app-layout="dark-sidebar"
+  data-kt-app-sidebar-enabled="true" data-kt-app-sidebar-fixed="true" data-kt-app-sidebar-hoverable="true"
+  data-kt-app-sidebar-push-footer="true" data-kt-app-sidebar-push-header="true" data-kt-app-sidebar-push-toolbar="true"
+  data-kt-app-toolbar-enabled="true" id="kt_app_body">
+
+  <div id="app">
+    <script>
+      var defaultThemeMode = "light";
+      var themeMode;
+      if (document.documentElement) {
+        if (document.documentElement.hasAttribute("data-theme-mode")) {
+          themeMode = document.documentElement.getAttribute("data-theme-mode");
+        } else {
+          if (localStorage.getItem("data-theme") !== null) {
+            themeMode = localStorage.getItem("data-theme");
+          } else {
+            themeMode = defaultThemeMode;
+          }
+        }
+        if (themeMode === "system") {
+          themeMode = window.matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light";
+        }
+        document.documentElement.setAttribute("data-theme", themeMode);
+      }
+    </script>
+
+
+
+  </div>
+
+<script>
+  var hostUrl = "assets/";
+</script>
+
+<script src="assets/plugins/global/plugins.bundle.js"></script>
+
+
+<script>
+
+
+
+window.fixSelectInModals = () => {
+  $(".modal").on("shown.bs.modal", function () {
+    var modal = $(this); // This will capture the opened modal
+    modal.find("select").each(function () {
+      // This will loop through each select element within the modal
+      var select = $(this);
+      if (select.data("select2")) {
+        // Check if select2 was already initialized
+        select.select2("destroy"); // Destroy select2
+      }
+      select.select2({
+        dropdownParent: modal,
+      });
+    });
+  });
+}
+
+</script>
+<div id="my-scripts"></div>
+
+
+
+
+
+
+
+
+
+
+
+</body>
+</html>
