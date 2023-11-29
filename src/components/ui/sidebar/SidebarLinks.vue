@@ -1,13 +1,7 @@
 <template>
   <div>
-    <MenuBlock
-      v-for="(block, index) in filteredMenuBlocks"
-      :key="index"
-      :title="block.title"
-      :iconClass="block.iconClass"
-      :submenuClass="block.submenuClass"
-      :menuItems="block.menuItems"
-    />
+        <MenuBlock v-for="(block, index) in filteredMenuBlocks" :key="index" :title="block.title" :iconClass="block.iconClass"
+          :submenuClass="block.submenuClass" :menuItems="block.menuItems" />
   </div>
 </template>
 
@@ -22,7 +16,7 @@ export default {
   },
   data() {
     return {
-   menuBlocks: [
+      menuBlocks: [
         {
           title: "Country Structures",
           iconClass: "fas fa-flag-checkered fa-3x",
@@ -91,7 +85,6 @@ export default {
               className: "mt-2 mb-2",
               link: "/StructureCebs",
             },
-            
           ],
         },
 
@@ -110,8 +103,6 @@ export default {
               className: "mt-2 mb-2",
               link: "/CebsSignals",
             },
-
-           
           ],
         },
         {
@@ -129,7 +120,6 @@ export default {
               className: "mt-2 mb-2",
               link: "/Logout",
             },
-            
           ],
         },
         {
@@ -137,7 +127,6 @@ export default {
           iconClass: "fas fa-chart-line fa-3x",
           submenuClass: "",
           menuItems: [
-           
             {
               label: "Reporting By District",
               className: "mt-2 mb-2",
@@ -181,7 +170,6 @@ export default {
           iconClass: "fas fa-user-cog fa-3x",
           submenuClass: "SUPERADMINPREV",
           menuItems: [
-            
             {
               label: "Logout",
               className: "mt-2 mb-2",
@@ -201,11 +189,15 @@ export default {
   },
   computed: {
     filteredMenuBlocks() {
-      const checkRole = "National Level Oversight";
-      const currentRole = sessionStorage.getItem("CurrentLoggedInUserRole");
+      const checkRole = "nationalleveloversight";
 
-      console.log('Role'+sessionStorage.getItem("CurrentLoggedInUserRole"));
-      if (currentRole === checkRole) {
+      const currentRole = sessionStorage.getItem("CurrentLoggedInUserRole");
+      const normalizedRole = currentRole ? currentRole.replace(/\s+/g, '').toLowerCase() : '';
+
+      console.log("Normalized Role: " + normalizedRole);
+
+
+      if (normalizedRole === checkRole) {
         return this.menuBlocks;
       } else {
         return this.menuBlocks.filter(block => block.title === "EBS Operations");
